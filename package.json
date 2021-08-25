@@ -1,0 +1,29 @@
+{
+  "name": "planning-center-export-cli",
+  "version": "0.1.0",
+  "description": "Command line utility for exporting Planning Center data",
+  "main": "./cli.js",
+  "scripts": {
+    "test": "node ./test.mjs"
+  },
+  "bin": {
+    "pce": "./cli.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johngully/planning-center-export-cli.git"
+  },
+  "keywords": [
+    "planning-center",
+    "planningcenter"
+  ],
+  "author": "John Gully",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/johngully/planning-center-export-cli/issues"
+  },
+  "homepage": "https://github.com/johngully/planning-center-export-cli#readme",
+  "dependencies": {
+    "planning-center-export": "^0.6.0"
+  }
+}
