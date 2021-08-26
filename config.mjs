@@ -5,7 +5,7 @@ import { sync } from "find-up";
 import { readFileSync } from "fs";
 
 const defaultConfig = {
-  destination: "./exported",
+  destination: "./",
   format: "json"
 };
 

@@ -8,7 +8,8 @@
     "test": "node ./test.mjs"
   },
   "bin": {
-    "pce": "./cli.mjs"
+    "pce": "./cli.mjs",
+    "pce-init": "./cli-init.mjs"
   },
   "repository": {
     "type": "git",
