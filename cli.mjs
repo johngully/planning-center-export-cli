@@ -8,38 +8,62 @@ import { getConfig } from "./config.mjs";
 import { PlanningCenter } from "planning-center-export";
 import { existsSync, mkdirSync } from "fs"
 import path from "path";
+import chalk from "chalk";
+import logSymbols from 'log-symbols';
 
-const config = getConfig();
-const planningCenterExport = new PlanningCenter(config);
+let entity;
 
-await exportToFile(config.entity);
+try {
+  const config = getConfig();
+  let { destination, entity, filePath, format, verbose } = config;
+  if (verbose) {
+    console.debug(chalk.dim.bold(`Config:`), config)
+  }
 
-async function exportToFile(entity, filePath) {
+  const planningCenterExport = new PlanningCenter(config);
+  
+  
   // Ensure an entity is provided
   if (!entity) {
+    console.log("ABOUT TO TROW")
     throw new Error(`An "entity" is required to export data from PlanningCenter`);
   }
 
   // Generate a default file path if one is not specified
   if (!filePath) {
-    const defaultFileName = `${entity}.${config.format}`;
-    const defaultFilePath = path.join(config.destination, defaultFileName); 
+    const defaultFileName = `${entity}.${format}`;
+    const defaultFilePath = path.join(destination, defaultFileName); 
     filePath = defaultFilePath;  
   }
 
   // Create the path if it doesn't exist
-  if (!existsSync(config.destination)){
-    mkdirSync(config.destination, { recursive: true });
+  if (!existsSync(destination)){
+    mkdirSync(destination, { recursive: true });
   }
-  
+
   // Export the entity
   const result = await planningCenterExport.export(entity, filePath);
 
-  console.log(`${entity} export complete`);
+  // Write the results to the console
+  console.log(`${logSymbols.success} ${chalk.green(entity)} export complete`);
   if (result.totalCount) {
-    console.log(`  ${result.totalCount} records written to:`, filePath);
+    console.log(chalk.dim(`  ${chalk.yellow(result.totalCount)} records written to:`, chalk.italic(filePath)));
   }
   if (result.parentTotalCount) {
-    console.log(`  ${result.totalCount} members in ${result.parentTotalCount} groups`);
+    console.log(chalk.dim(`  ${chalk.yellow(result.totalCount)} members in ${chalk.yellow(result.parentTotalCount)} groups`));
+  }  
+} catch(error) {
+  // Write any errors to the console
+  if (entity) {
+    console.error(`${logSymbols.error} ${chalk.red(entity)} export failed`);
+  } else {
+    console.error(chalk.red(`${logSymbols.error} Export failed`))
   }
+  console.error(chalk.dim(`  ${error}`));
+  
 }
+
+// async function exportToFile(entity, filePath) {
+  
+  
+// }
