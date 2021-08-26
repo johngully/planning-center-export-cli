@@ -1,0 +1,9 @@
+/node_modules
+/export*
+
+.env
+.DS_Store
+.vscode
+.planningcenterrc
+planningcenterrc.json
+*test*.mjs
