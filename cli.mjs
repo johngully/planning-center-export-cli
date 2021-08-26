@@ -10,22 +10,25 @@ import { existsSync, mkdirSync } from "fs"
 import path from "path";
 import chalk from "chalk";
 import logSymbols from 'log-symbols';
+import DraftLog from "draftlog";
 
 let entity;
 
+// Create a draft console line to be updated over time
+DraftLog(console);
+const updateConsole = console.draft(``);
+
 try {
+  // Get the configured values from the commandline args, and configuration files
   const config = getConfig();
-  let { destination, entity, filePath, format, verbose } = config;
+  let { destination, filePath, format, verbose } = config;
+  entity = config.entity;
   if (verbose) {
     console.debug(chalk.dim.bold(`Config:`), config)
   }
 
-  const planningCenterExport = new PlanningCenter(config);
-  
-  
   // Ensure an entity is provided
   if (!entity) {
-    console.log("ABOUT TO TROW")
     throw new Error(`An "entity" is required to export data from PlanningCenter`);
   }
 
@@ -42,10 +45,12 @@ try {
   }
 
   // Export the entity
+  updateConsole(`${logSymbols.info} ${chalk.blue(entity)} export starting`);
+  const planningCenterExport = new PlanningCenter(config);
   const result = await planningCenterExport.export(entity, filePath);
 
   // Write the results to the console
-  console.log(`${logSymbols.success} ${chalk.green(entity)} export complete`);
+  updateConsole(`${logSymbols.success} ${chalk.green(entity)} export complete`);
   if (result.totalCount) {
     console.log(chalk.dim(`  ${chalk.yellow(result.totalCount)} records written to:`, chalk.italic(filePath)));
   }
@@ -55,15 +60,9 @@ try {
 } catch(error) {
   // Write any errors to the console
   if (entity) {
-    console.error(`${logSymbols.error} ${chalk.red(entity)} export failed`);
+    updateConsole(`${logSymbols.error} ${chalk.red(entity)} export failed`);
   } else {
-    console.error(chalk.red(`${logSymbols.error} Export failed`))
+    updateConsole(chalk.red(`${logSymbols.error} Export failed`));
   }
   console.error(chalk.dim(`  ${error}`));
-  
 }
-
-// async function exportToFile(entity, filePath) {
-  
-  
-// }
