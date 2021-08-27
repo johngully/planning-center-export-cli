@@ -26,7 +26,7 @@ pce-init --applicationId "01absa...uA120" --secret "97Lsn...Yn12x"
 
 **All valid configuration options**:
 ```bash
-pce-init --applicationId "01absa...uA120" --secret "97Lsn...Yn12x" --pageSize 100 --format "csv" --destination "./exported-files"
+pce-init --applicationId "01absa...uA120" --secret "97Lsn...Yn12x" --pageSize 100 --format "csv" --destination "./exported-files" --tab "care_ministry"
 ```
 
 ## Command Line Usage
@@ -38,13 +38,22 @@ pce campuses
 ```
 **All valid export options**
 ```bash
-pce campuses --applicationId "01absa...uA120" --secret "97Lsn...Yn12x" --pageSize 100 --format "csv" --destination "./exported-files"
+pce peopleTabs care_ministry --applicationId "01absa...uA120" --secret "97Lsn...Yn12x" --pageSize 100 --format "csv" --destination "./exported-files" --tab "care_ministry"
 ```
 
 ## Supported Export Entities
 The primary parameter to the `pce` command is the "entity" that will be exported.  This is the list of [currently supported entities](https://github.com/johngully/planning-center-export/blob/main/planningCenterEnums.mjs):
 
-`campuses`, `checkins`, `emails`, `events`, `eventTimes`, `groups`, `groupMembers`, `groupTypes`, `headcounts`, `households`, `people`, `peopleStats`
+`campuses`, `checkins`, `emails`, `events`, `eventTimes`, `groups`, `groupMembers`, `groupTypes`, `headcounts`, `households`, `people`, `peopleStats`, `peopleTabs`
+
+> **People Tab Data**
+> Data stored in custom tabs can be exported using the `peopleTabs` entity in combination with the name (`slug`) of the tab.  Both the entity and the tab must be specified when exporting this data.
+>
+> `pce peopleTabs care_minisitry`
+>
+> or
+>
+> `pce peopleTabs --tab care_ministry`
 
 ## Configuration
 The command line utility will use preconfigured settings for commands to reduced repetition of arguments that don't typically change from one call to another.
@@ -107,3 +116,8 @@ The path where files should be exported.
 ##### REQUIRED: **OPTIONAL**
 ##### DEFAULT VALUE: **./** *(the current working directory)*
 
+### Tab
+
+The slug name of the Planning Center custom tab.  This is used to export data stored in custom tabs and fields configured for "People".  This attribute can also be specified as an optional second parameter after the entity.  If provided more than once, the value in `--tab` will be used.
+##### REQUIRED: **OPTIONAL**
+##### DEFAULT VALUE: **N/A**

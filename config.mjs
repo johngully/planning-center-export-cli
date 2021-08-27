@@ -11,17 +11,22 @@ const defaultConfig = {
 
 function getConfigFromUserArgs() {
   // Get from user command line args
-  // When calling the cli expect the following format
-  // {command} {entity} --{attribute1} {attribute1Value} --{attribute2} {attribute2Value}
+  // When calling the cli expect the following format (tabs and attributes are optional)
+  // {command} {entity} {tab} --{attribute1} {attribute1Value} --{attribute2} {attribute2Value}
   //
   // Example:
   // pce campuses --pageSize 50 --destination ./exported-files
   // 
   const args = Yargs(process.argv.slice(2)).argv;
   const entity = args._[0];
+  const tab = args._[1];
   delete args._;
   delete args.$0;
-  const config = { entity, ...args }
+  const config = { 
+    entity, 
+    ...tab && { tab }, // This line will only add the tab key if it has a value
+    ...args 
+  }
   return config;
 }
 

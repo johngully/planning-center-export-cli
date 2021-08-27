@@ -32,9 +32,17 @@ try {
     throw new Error(`An "entity" is required to export data from PlanningCenter`);
   }
 
+  // Create the options if present
+  let tabName = "";
+  let options;
+  if (config.tab) {
+    tabName = `-${config.tab}`;
+    options = { tab: config.tab };
+  }
+
   // Generate a default file path if one is not specified
   if (!filePath) {
-    const defaultFileName = `${entity}.${format}`;
+    const defaultFileName = `${entity}${tabName}.${format}`;
     const defaultFilePath = path.join(destination, defaultFileName); 
     filePath = defaultFilePath;  
   }
@@ -47,7 +55,7 @@ try {
   // Export the entity
   updateConsole(`${logSymbols.info} ${chalk.blue(entity)} export starting`);
   const planningCenterExport = new PlanningCenter(config);
-  const result = await planningCenterExport.export(entity, filePath);
+  const result = await planningCenterExport.export(entity, filePath, options);
 
   // Write the results to the console
   updateConsole(`${logSymbols.success} ${chalk.green(entity)} export complete`);
