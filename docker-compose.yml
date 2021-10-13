@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  planningcenterexportcli:
+    image: planningcenterexportcli
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    volumes:
+      - ./exported:/exported
+    entrypoint: ["/bin/sh","-c"]
+    command: 
+      - | 
+        pce addresses
+        pce campuses
+        pce checkins
+        pce emails
+        pce events
+        pce eventTimes
+        pce groups
+        pce groupMembers
+        pce groupTypes
+        pce headcounts
+        pce households
+        pce notes
+        pce people
+        pce peopleStats
+        pce peopleTabs

@@ -121,3 +121,58 @@ The path where files should be exported.
 The slug name of the Planning Center custom tab.  This is used to export data stored in custom tabs and fields configured for "People".  This attribute can also be specified as an optional second parameter after the entity.  If provided more than once, the value in `--tab` will be used.
 ##### REQUIRED: **OPTIONAL**
 ##### DEFAULT VALUE: **N/A**
+
+
+# Planning Center Export Docker Image
+For some use cases, especially in cloud infrastructure, a docker image may provide a simple approach to exporting data.  Running the docker container in this way will execute the configured exports then shut down the container.  This is handy for scheduled execution of data exports.
+
+**Docker Run**
+```bash
+docker run --rm -v /local-path/exported-files:/exported-files planningcenterexportcli:latest /bin/sh -c "pce groups && pce groupMembers && pce groupTypes"
+```
+
+```bash
+docker run --rm --env PLANNING_CENTER_CLI_APPLICATION_ID='01absa...uA120' --env PLANNING_CENTER_CLI_SECRET='97Lsn...Yn12x' --env PLANNING_CENTER_CLI_DESTINATION='/exported-files' -v /local-path/exported-files:/exported-files planningcenterexportcli:latest /bin/sh -c "pce addresses && pce campuses && pce checkins && pce emails && pce events && pce eventTimes && pce groups && pce groupMembers && pce groupTypes && pce headcounts && pce households && pce notes && pce people && pce peopleStats && pce peopleTabs"
+```
+
+**Docker Compose**
+```bash
+docker-compose up
+```
+Example docker compose file
+```yml
+version: '3.4'
+
+services:
+  planningcenterexportcli:
+    image: planningcenterexportcli
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    volumes:
+      - /local-path/exported-files:/exported-files
+    entrypoint: ["/bin/sh","-c"]
+    command: 
+      - | 
+        pce addresses
+        pce campuses
+        pce checkins
+        pce emails
+        pce events
+        pce eventTimes
+        pce groups
+        pce groupMembers
+        pce groupTypes
+        pce headcounts
+        pce households
+        pce notes
+        pce people
+        pce peopleStats
+        pce peopleTabs
+```
+
+
+
+
