@@ -1,30 +1,27 @@
 version: '3.4'
 
 services:
-  planningcenterexportcli:
-    image: planningcenterexportcli
+  planning-center-export-cli:
+    image: johngully/planning-center-export-cli:v0.8.0
     build:
       context: .
       dockerfile: ./Dockerfile
+    deploy:
+      restart_policy:
+        condition: none
     environment:
       NODE_ENV: production
+      PLANNING_CENTER_CLI_APPLICATION_ID: "b62490c821921b670120d54bae05f5296aba7afedebf861916593afa9e9b8dbf"
+      PLANNING_CENTER_CLI_SECRET: "482a28436acdedd4fd5253cd1791dccc1299423b7acc8fbdc50e22be97bef78f"
+      PLANNING_CENTER_CLI_DESTINATION: "/exported"
     volumes:
-      - ./exported:/exported
-    entrypoint: ["/bin/sh","-c"]
-    command: 
-      - | 
-        pce addresses
-        pce campuses
-        pce checkins
-        pce emails
-        pce events
-        pce eventTimes
-        pce groups
-        pce groupMembers
-        pce groupTypes
-        pce headcounts
-        pce households
-        pce notes
-        pce people
-        pce peopleStats
-        pce peopleTabs
+      - mydata:/exported
+    # command: /bin/sh -c "pce groups && pce groupTypes"
+    command: /bin/sh -c "pce addresses && pce campuses && pce checkins && pce emails && pce events && pce eventTimes && pce groups && pce groupMembers && pce groupTypes && pce headcounts && pce households && pce notes && pce people && pce peopleStats && pce peopleTabs"
+
+volumes:
+  mydata:
+    driver: azure_file
+    driver_opts:
+      share_name: data
+      storage_account_name: ptccdata

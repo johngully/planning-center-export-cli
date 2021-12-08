@@ -173,6 +173,17 @@ services:
         pce peopleTabs
 ```
 
+# Developer Notes
+Here are the recommeneded steps to release a new version of the library.
 
+```bash
+git commit -am 'Updated something'
+git push
+npx np 0.9.0
+
+docker build -t johngully/planning-center-export-cli:v0.9.0 .
+docker push johngully/planning-center-export-cli:v0.9.0
+
+```
 
 
